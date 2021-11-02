@@ -43,7 +43,15 @@ export default async function(fastify, opts, done){
         const {product_name} = request.params
         const mongo_connect = await MongoClient.connect(mongo_url,mongo_connect_options).catch((err)=>{request.log.info('Error while connecting to mongo db!');throw err});
         const database = await mongo_connect.db(db_name)
-        const product = await database.collection('product').updateOne({product_name},{$set:request.body})
+        const {details,price,image} = request.body
+        let set_body = {details,price}
+        if(image){
+            const {name,base64} = image
+            const image_path = `${name}`
+            await writeFile(`images/${name}`, base64, 'base64')
+            set_body.image=image_path
+        } 
+        const product = await database.collection('product').updateOne({product_name},{$set:set_body})
         await mongo_connect.close();
         return reply.code(200).send();
     })

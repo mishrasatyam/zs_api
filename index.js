@@ -21,7 +21,7 @@ fastify.addHook('onReady', async ()=> {
     await mkdir('images').catch((err)=>{})
 })
 
-fastify.register(cors, {origin:env=='prod'?process.env.FRONTEND_URL:'http://localhost:3000',credentials:true,methods:['GET','POST']})
+fastify.register(cors, {origin:env=='prod'?process.env.FRONTEND_URL:'http://localhost:3000',credentials:true,methods:['GET','POST','PUT','DELETE']})
 
   
 fastify.register(routes)
