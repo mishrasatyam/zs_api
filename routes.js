@@ -1,6 +1,5 @@
 import {MongoClient} from 'mongodb';
 import {mongo_url,db_name, mongo_connect_options} from './utils.js';
-import {env} from './utils.js'
 import {writeFile} from 'fs/promises'
 export default async function(fastify, opts, done){
 
@@ -58,7 +57,7 @@ export default async function(fastify, opts, done){
 
     fastify.get('/product_list/',async (request,reply) => {
         let {number,page,name} = request.query
-        if(!number){number = 5}else{number=Number(number)}
+        if(!number){number = 8}else{number=Number(number)}
         if(!page){page=1}
         page = Math.floor(page);
         const collection = 'product'
@@ -73,9 +72,6 @@ export default async function(fastify, opts, done){
         const page_count = Math.ceil(total_records / number);
         await mongo_connect.close();
         return reply.code(200).send({result,page_count,current_page:page})
-    })
-
-
-    
+    })   
     done()
 }
